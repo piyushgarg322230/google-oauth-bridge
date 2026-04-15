@@ -56,8 +56,10 @@ app.get('/api/v1/auth/google', async (req, res) => {
       );
     } catch (e) {
       console.error('❌ TOKEN EXCHANGE FAILED');
+      console.error('Error Message:', e.message);
       console.error('Google Response:', e.response?.data);
       console.error('Status:', e.response?.status);
+      console.error('Full Error:', e);
       throw e;
     }
 
@@ -127,7 +129,11 @@ app.get('/api/v1/auth/google', async (req, res) => {
   } catch (err) {
     console.error('🔥 GOOGLE OAUTH DEBUG ERROR');
     console.error(err.response?.data || err.message);
-    res.status(500).json({ error: 'Google login failed (debug)' });
+    res.status(500).json({ 
+      error: 'Google login failed', 
+      message: err.message,
+      details: err.response?.data 
+    });
   }
 });
 
